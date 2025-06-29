@@ -10,7 +10,7 @@ import tempfile
 import streamlit as st
 import os
 
-# 🔐 Load environment variables from .env
+# Load Gemini API key from .env
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
@@ -43,13 +43,16 @@ def generate_vectorstore(docs):
 def build_qa_chain(retriever):
     llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash-latest")
 
+    # RBI-specific assistant with soft small talk support
     guard_prompt = PromptTemplate(
         input_variables=["context", "question"],
         template="""
-You are an RBI compliance assistant. Only answer questions related to RBI circulars, banking regulations, and financial compliance.
+You are an RBI compliance assistant. Your primary job is to help users understand RBI circulars, banking regulations, and financial compliance.
 
-If the question is not related to RBI or banking, politely reply:
-"I'm sorry, I can only assist with RBI compliance and regulatory matters."
+You may also answer small talk or background questions *only* if they are directly related to RBI, KYC, NPAs, compliance policies, or regulatory goals.
+
+If the question is totally unrelated (e.g., about food, sports, celebrities), politely respond:
+"I'm designed to assist only with RBI-related topics and compliance queries."
 
 Context:
 {context}
@@ -104,3 +107,19 @@ Only include departments relevant to the circular. Keep responses short and clea
         chain_type="stuff",
         chain_type_kwargs={"prompt": action_prompt}
     )
+
+
+# 🔍 Auto-detect topic for dynamic placeholder
+def guess_topic(docs):
+    text = " ".join([doc.page_content.lower() for doc in docs[:5]])
+    if "kyc" in text:
+        return "KYC guidelines"
+    elif "npa" in text or "non-performing asset" in text:
+        return "NPA norms"
+    elif "digital lending" in text:
+        return "digital lending rules"
+    elif "compliance" in text:
+        return "RBI compliance rules"
+    elif "governor" in text:
+        return "RBI background and leadership"
+    return "the uploaded RBI circular"
