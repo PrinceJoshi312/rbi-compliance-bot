@@ -33,14 +33,29 @@ Whether you're a compliance officer, part of a legal team, or someone trying to 
 ## 🚀 How to Run Locally
 
 1. Clone this repo:
-   ```bash
-   git clone https://github.com/yourusername/rbi-compliance-bot.git
-   cd rbi-compliance-bot
+
+```bash
+git clone https://github.com/yourusername/rbi-compliance-bot.git
+cd rbi-compliance-bot
+```
+
+2. Install dependencies:
+
+```bash
 pip install -r requirements.txt
+```
 
-os.environ["GOOGLE_API_KEY"] = "your_gemini_api_key"
+3. Create a `.env` file in the root directory and add your Gemini API key:
 
+```
+GOOGLE_API_KEY=your_gemini_api_key
+```
+
+4. Run the application:
+
+```bash
 streamlit run app.py
+```
 
 👥 Who This Is For
 Bank compliance teams
