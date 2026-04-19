@@ -17,9 +17,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the app
 COPY . .
 
+# Set PYTHONPATH to include the backend directory for imports
+ENV PYTHONPATH=/app/backend
+
 # Streamlit runs on port 8080 in Fly.io
 ENV PORT=8080
 EXPOSE 8080
 
 # Start Streamlit app
-CMD ["streamlit", "run", "app.py", "--server.port=8080", "--server.enableCORS=false"]
+CMD ["streamlit", "run", "rbi-compliance-bot-master/app_streamlit.py", "--server.port=8080", "--server.enableCORS=false"]
