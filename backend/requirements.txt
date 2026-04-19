@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-multipart
+langchain
+faiss-cpu
+pypdf
+tiktoken
+langchain-google-genai
+langchain-community
+google-generativeai
+python-dotenv
+sentence-transformers
+torch --index-url https://download.pytorch.org/whl/cpu
